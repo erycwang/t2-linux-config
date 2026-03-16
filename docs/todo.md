@@ -44,26 +44,12 @@ Gaps and planned changes to the current system setup, ordered by priority.
 - ~~Verify `systemctl suspend` works cleanly on T2 hardware~~ — root cause found: `brcmfmac` WiFi driver times out on suspend, and `deep` sleep never resumes
   - **Partial fix already in place**: `/usr/lib/systemd/system-sleep/wifi-sleep` tries to unload/reload the WiFi driver around sleep, but it fails because `brcmfmac` is still in use by NetworkManager at the time it runs
 
-#### Fix 1 — Switch from `deep` to `s2idle` sleep
+#### Fix 1 — Switch from `deep` to `s2idle` sleep ✅ Not needed
 
-[OPTIONAL - we seem to be able to reboot from deep sleep as long as we unload the drivers] S3 deep sleep is broken at the firmware level (since macOS Sonoma). Switch to s2idle:
-
-- Add `mem_sleep_default=s2idle` to kernel parameters in `/etc/default/limine`:
-  ```
-  KERNEL_CMDLINE[default]+="... mem_sleep_default=s2idle"
-  ```
-  Then regenerate: `sudo limine-mkconfig -o /boot/limine/limine.conf` (or however CachyOS regenerates Limine config)
-- Also set in `/etc/systemd/sleep.conf`:
-  ```ini
-  [Sleep]
-  SuspendState=freeze
-  MemorySleepMode=s2idle
-  ```
-- **Test without rebooting**: `echo s2idle | sudo tee /sys/power/mem_sleep && systemctl suspend`
-- Trade-off: `s2idle` uses more battery than true S3 (CPU stays in low-power idle rather than fully powering down)
+**Confirmed not required (2026-03-15)**: S3 deep sleep works correctly with Fix 2 v5. See [ArchWiki: Mac/Troubleshooting](https://wiki.archlinux.org/title/Mac/Troubleshooting) if s2idle is ever needed.
 
 
-#### Fix 2 — Unload T2 and WiFi modules around suspend ✅ Done (v4)
+#### Fix 2 — Unload T2 and WiFi modules around suspend ✅ Done (v5)
 
 `/etc/systemd/system/suspend-fix-t2.service` deployed and enabled.
 
@@ -82,6 +68,16 @@ Gaps and planned changes to the current system setup, ordered by priority.
 2. **`rmmod` order was backwards** — listed `brcmfmac` before `brcmfmac_wcc`, but `brcmfmac_wcc` depends on `brcmfmac` (refcount = 1), so removal fails. Should use `modprobe -r brcmfmac` which resolves dep order automatically.
 
 **v5 fix (2026-03-15)**: Added `systemctl stop iwd` after stopping NM. Replaced `rmmod -f brcmfmac brcmfmac_wcc` with `modprobe -r brcmfmac` (handles dependency order: removes `brcmfmac_wcc` first, then `brcmfmac`). Added `systemctl start iwd` on the resume path before starting NM.
+
+**v5 result (2026-03-15) ✅**: Full suspend/resume working on S3 deep sleep. Confirmed from logs and user testing:
+- `PM: suspend entry (deep)` + `ACPI: PM: Waking up from system sleep state S3` — true S3, not s2idle
+- Keyboard/trackpad ✅, WiFi ✅, audio (aaudio: Speaker, Mic, Codec) ✅, FaceTime camera ✅, Ambient Light Sensor ✅, Touch Bar ✅
+
+**Known benign issues on resume (no action needed)**:
+- `hid-appletb-kbd: error -ENODEV: Failed to get backlight device` — timing race between hid_appletb_kbd and hid_appletb_bl enumeration on the BCE virtual USB bus. Touch Bar functions correctly regardless.
+- `brcmfmac: timed out waiting for txstatus` — transient during WiFi firmware re-init, clears within seconds.
+- `iwd: Network configuration is disabled` — expected; NM manages routing, not iwd.
+- `t2_ncm` Wired Connection 1 DHCP failures — NM repeatedly tries to activate the T2's internal NCM Ethernet interface (no DHCP server on it). Harmless but noisy; can be silenced by setting that connection to manual/ignored in NM.
 
 ```ini
 [Unit]
@@ -147,10 +143,10 @@ The [ArchWiki](https://wiki.archlinux.org/title/Mac/Troubleshooting) suggests ad
 
 #### Testing checklist
 
-- [ ] Suspend via `systemctl suspend` — screen comes back on resume
-- [ ] WiFi reconnects after resume
-- [ ] Audio works after resume
-- [ ] Touch Bar works after resume
+- [x] Suspend via `systemctl suspend` — screen comes back on resume ✅
+- [x] WiFi reconnects after resume ✅
+- [x] Audio works after resume ✅ (aaudio: Speaker, Mic, Codec all reinit on resume)
+- [x] Touch Bar works after resume ✅
 - [ ] Lid close triggers suspend, lid open resumes
 - [ ] No spurious immediate wakeups
 - [ ] Resume time is acceptable (up to 30 seconds can be normal on T2 due to ibridge/smpboot delays)
@@ -235,7 +231,7 @@ The [ArchWiki](https://wiki.archlinux.org/title/Mac/Troubleshooting) suggests ad
 |---|---|---|
 | Keyring daemon (gnome-keyring) | 🔴 High | Not started — gh token in plaintext |
 | Lock screen (hyprlock + hypridle) | 🔴 High | Not started |
-| Suspend (test + configure) | 🔴 High | Fix 2 v5 deployed (keyboard ✅, WiFi testing) |
+| Suspend (test + configure) | 🟢 Done | Fix 2 v5 — keyboard ✅, WiFi ✅, audio ✅, Touch Bar ✅ |
 | Status bar (quickshell) | 🟠 Medium | Not started |
 | Notification daemon (mako) | 🟠 Medium | Not started |
 | Browser migration (Brave) | 🟡 Planned | Not started |
