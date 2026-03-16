@@ -13,6 +13,32 @@ Services can run at two levels:
 
 To check a user service: `systemctl --user status <service>`
 
+## Debugging suspend/resume WiFi issues
+
+Useful commands for diagnosing brcmfmac / WiFi failures after resume:
+
+```bash
+# Suspend fix service logs (current boot)
+journalctl -b -u suspend-fix-t2.service --no-pager
+
+# Kernel logs for WiFi driver and PCI power events
+journalctl -b -k -g "brcmfmac|D3cold|pci.*rescan|pci.*remove" --no-pager
+
+# iwd logs — check if Wiphy was detected after resume
+journalctl -b -u iwd --no-pager
+
+# NetworkManager logs
+journalctl -b -u NetworkManager --no-pager
+
+# Use -b -1, -b -2 etc. to check previous boots
+```
+
+**What to look for:**
+- `Unable to change power state from D3cold to D0` — PCIe device stuck, needs PCI remove/rescan
+- `brcmf_pcie_probe: failed` — brcmfmac loaded but couldn't talk to hardware
+- `registered new interface driver brcmfmac` with **no** `enabling device` or firmware version after it — module loaded but no PCI device present to probe
+- iwd showing only `Network configuration is disabled` with no `Wiphy:` line — no WiFi hardware visible
+
 ## hyprpolkitagent
 
 A polkit authentication agent — provides GUI prompts when an app requests elevated privileges (e.g. package installs, system changes).
