@@ -14,20 +14,13 @@ Gaps and planned changes to the current system setup, ordered by priority.
 
 ---
 
-### Lock screen + idle daemon
+### Lock screen + idle daemon ✅ Done
 
-**Status bar has no lock screen and no idle management configured.**
-
-- Install `hyprlock` — Hyprland-native screen locker
-- Install `hypridle` — Hyprland-native idle daemon (replaces unused `kidletime`)
-- Configure `hypridle` with a chain:
-  1. Dim screen after N minutes
-  2. Lock with `hyprlock` after M minutes
-  3. Suspend after P minutes (calls `systemctl suspend`)
-- Wire `hyprlock` into the Hyprland keybind (e.g. `Super+L`)
-- Remove `kidletime` if it's no longer needed as a dependency
-
-**Why this is #1**: No lock screen is a security gap. Suspend also depends on this — without `hypridle`, suspend won't trigger automatically on idle.
+- `hyprlock` + `hypridle` installed
+- `hypridle` autostarted via `exec-once` in Hyprland; idle chain: 2 min dim → 3 min lock → 10 min suspend
+- `hyprlock` bound to `Super+Shift+L`; also triggered by `hypridle` and before suspend
+- `kidletime` kept — pulled in by `baloo` → `dolphin`, cannot remove
+- Lock screen: blurred screenshot background, clock, centered password input
 
 ---
 
@@ -241,7 +234,7 @@ Recommended: `swayosd` — less wiring, handles all three use cases out of the b
 | Item | Priority | Status |
 |---|---|---|
 | Keyring daemon (gnome-keyring) | 🟢 Done | ✅ Token in keyring, hosts.yml clean |
-| Lock screen (hyprlock + hypridle) | 🔴 High | Not started |
+| Lock screen (hyprlock + hypridle) | 🟢 Done | ✅ hyprlock + hypridle configured |
 | Suspend (test + configure) | 🟢 Done | Fix 2 v5 — keyboard ✅, WiFi ✅, audio ✅, Touch Bar ✅ |
 | Status bar (quickshell) | 🟠 Medium | Not started |
 | Notification daemon (mako) | 🟠 Medium | Not started |

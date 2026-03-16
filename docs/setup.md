@@ -57,8 +57,8 @@
 | **Notifications** | — | Not installed |
 | **Screenshot** | hyprshot | ✅ |
 | **Wallpaper** | — | Using Hyprland default |
-| **Screen lock** | — | Not installed |
-| **Idle/suspend daemon** | kidletime (installed, unused) | Not configured |
+| **Screen lock** | hyprlock | ✅ `Super+Shift+L`; blurred screenshot + clock |
+| **Idle/suspend daemon** | hypridle | ✅ 2 min dim → 3 min lock → 10 min suspend |
 | **Clipboard** | wl-clipboard | ✅ |
 | **Polkit agent** | hyprpolkitagent (at `/usr/local/libexec/`) | ✅ |
 
