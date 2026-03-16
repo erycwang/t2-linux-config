@@ -224,8 +224,8 @@ Recommended: `swayosd` — less wiring, handles all three use cases out of the b
 ### t2fanrd — ✅ Done
 
 - Enabled via `systemctl enable --now t2fanrd`
-- Running on defaults: linear curve, 55°C–75°C, 1350–6864 RPM
-- Create `/etc/t2fand.conf` if custom fan curve is needed
+- Custom config at `/etc/t2fand.conf`: logarithmic curve, 50°C–72°C
+- Logarithmic: fans ramp quickly at low temps, flatten near max — more responsive at the low end, quieter under sustained load
 
 ---
 
