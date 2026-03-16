@@ -4,6 +4,18 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ---
 
+## 2026-03-16
+
+### Suspend fix updated — `suspend-fix-t2.service` v6
+
+Added `modprobe -r brcmfmac_wcc` before `modprobe -r brcmfmac` in the pre-suspend sequence.
+
+**Root cause of previous issue**: `brcmfmac_wcc` is a dependent module that holds a reference on `brcmfmac`, preventing it from unloading. Every suspend was logging `Module brcmfmac is in use`, causing brcmfmac to go through its full PCIe D3 suspend sequence instead of being cleanly unloaded — adding ~19s to suspend entry time.
+
+Also added `t2-suspend-fix.sh` — a `/etc/systemd/system-sleep/` hook version of the same fix for future reference. Not yet deployed. The hook approach runs later in the suspend sequence (after systemd unit ordering is complete) and is simpler, but the service is what originally fixed the black-screen hang so it was patched first.
+
+---
+
 ## 2026-03-15
 
 ### Suspend fully fixed — `suspend-fix-t2.service` v5 ✅

@@ -30,7 +30,7 @@
 | **Networking** | iwd (WiFi), NetworkManager |
 | **Bluetooth** | bluetooth daemon |
 | **Power management** | power-profiles-daemon |
-| **Suspend (T2)** | suspend-fix-t2.service (unloads apple-bce + brcmfmac + iwd around sleep; S3 deep sleep) |
+| **Suspend (T2)** | suspend-fix-t2.service (unloads apple-bce, brcmfmac_wcc, brcmfmac, touch bar modules + iwd/NM around sleep; S3 deep sleep) |
 | **Fan control (T2)** | t2fanrd (enabled, active) |
 | **Storage optimization** | Snapper (BTRFS snapshots, configured for root) |
 

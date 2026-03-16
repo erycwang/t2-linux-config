@@ -31,8 +31,8 @@ Gaps and planned changes to the current system setup, ordered by priority.
 `/etc/systemd/system/suspend-fix-t2.service` unloads `apple-bce`, `brcmfmac`, and Touch Bar modules before sleep and reloads them on resume. S3 deep sleep confirmed working. See [t2linux wiki](https://wiki.t2linux.org/guides/postinstall/) for background.
 
 **Remaining items**:
-- [ ] Lid close triggers suspend, lid open resumes
-- [ ] No spurious immediate wakeups (`XHC1`/`ARPT` ACPI wakeup sources not yet disabled)
+- [x] Lid close triggers suspend, lid open resumes
+- [~] No spurious immediate wakeups (`XHC1`/`ARPT` ACPI wakeup sources) — not observed in practice, not doing
 
 ---
 
@@ -156,7 +156,7 @@ Switching only requires changing the DM — UWSM, Hyprland config, and all autos
 |---|---|---|
 | Keyring daemon (gnome-keyring) | 🟢 Done | ✅ Token in keyring, hosts.yml clean |
 | Lock screen (hyprlock + hypridle) | 🟢 Done | ✅ hyprlock + hypridle configured |
-| Suspend (test + configure) | 🟢 Done | Fix 2 v5 — keyboard ✅, WiFi ✅, audio ✅, Touch Bar ✅ |
+| Suspend (test + configure) | 🟢 Done | Fix 2 v5 — keyboard ✅, WiFi ✅, audio ✅, Touch Bar ✅, lid close ✅ |
 | Status bar (quickshell) | 🟠 Medium | Not started |
 | Notification daemon (mako) | 🟠 Medium | Not started |
 | Browser migration (Brave) | 🟡 Planned | Not started |
