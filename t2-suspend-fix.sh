@@ -46,6 +46,7 @@ case "$1" in
         # Reload WiFi
         rfkill unblock wifi
         modprobe brcmfmac
+        modprobe brcmfmac_wcc
 
         # Restart networking
         sleep 1

@@ -30,6 +30,7 @@ ExecStop=/usr/bin/modprobe hid_appletb_kbd
 ExecStop=/usr/bin/rfkill unblock wifi
 ExecStop=-/usr/bin/modprobe -r brcmfmac
 ExecStop=/usr/bin/modprobe brcmfmac
+ExecStop=/usr/bin/modprobe brcmfmac_wcc
 ExecStop=/usr/bin/sleep 1
 ExecStop=/usr/bin/systemctl start iwd
 ExecStop=/usr/bin/sleep 1

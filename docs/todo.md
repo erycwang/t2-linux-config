@@ -33,6 +33,7 @@ Gaps and planned changes to the current system setup, ordered by priority.
 **Remaining items**:
 - [x] Lid close triggers suspend, lid open resumes
 - [~] No spurious immediate wakeups (`XHC1`/`ARPT` ACPI wakeup sources) — not observed in practice, not doing
+- [ ] Replace `sleep 2` after `modprobe apple-bce` in `suspend-fix-t2.service` with `udevadm settle --timeout=5` — waits for udev to finish enumerating T2 devices instead of fixed delay, potentially faster resume. Needs testing to confirm touch bar/keyboard still come back reliably.
 
 ---
 
