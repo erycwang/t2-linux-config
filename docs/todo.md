@@ -118,6 +118,16 @@ No annotation tool configured. Useful for marking up screenshots before sharing.
 
 ---
 
+### Display manager migration (optional)
+
+Current stack: SDDM → UWSM → Hyprland. SDDM still spawns an Xorg process for its greeter even in Wayland mode (invisible with autologin, but not purely Wayland).
+
+Alternative: **greetd + regreet** — purely Wayland-native, no Xorg, more modular. Popular in minimal Hyprland setups.
+
+Switching only requires changing the DM — UWSM, Hyprland config, and all autostart items are unaffected. See `docs/display-manager-architecture.md` for full details.
+
+---
+
 ### Wallpaper
 
 - Install `hyprpaper` (Hyprland-native) or `swww` (supports animated wallpapers)
@@ -154,6 +164,7 @@ No annotation tool configured. Useful for marking up screenshots before sharing.
 | OSD / HUD bars (swayosd or wob) | 🟢 Nice to have | Not started |
 | Clipboard manager (cliphist) | 🟢 Nice to have | Not started |
 | Screenshot annotation (satty) | 🟢 Nice to have | Not started |
+| Display manager migration (greetd) | ⚪ Optional | Not started — see display-manager-architecture.md |
 | Wallpaper | 🟢 Nice to have | Not started |
 | Cleanup orphaned terminals | 🟢 Nice to have | Not started |
 | t2fanrd decision | 🟢 Nice to have | ✅ Done |
