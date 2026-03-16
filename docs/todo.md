@@ -199,6 +199,21 @@ The [ArchWiki](https://wiki.archlinux.org/title/Mac/Troubleshooting) suggests ad
 
 ---
 
+### OSD / HUD bars
+
+Visual overlays for volume, brightness, and keyboard brightness on keypress. Common Wayland options:
+
+- `swayosd` (AUR: `swayosd-git`) — runs as a background service, handles volume/brightness/caps lock natively, integrates cleanly with Hyprland
+- `wob` — simpler pipe-based bar, requires wiring manually to each keybind
+
+Recommended: `swayosd` — less wiring, handles all three use cases out of the box.
+
+- Install and enable: `paru -S swayosd-git` + `exec-once = swayosd-server` in Hyprland config
+- Update volume/brightness keybinds to call `swayosd-client` instead of raw `wpctl`/`brightnessctl`
+- Add keyboard brightness keybind if not already present
+
+---
+
 ### Wallpaper
 
 - Install `hyprpaper` (Hyprland-native) or `swww` (supports animated wallpapers)
@@ -232,6 +247,7 @@ The [ArchWiki](https://wiki.archlinux.org/title/Mac/Troubleshooting) suggests ad
 | Notification daemon (mako) | 🟠 Medium | Not started |
 | Browser migration (Brave) | 🟡 Planned | Not started |
 | Screenshot tool | 🟢 Nice to have | ✅ Done |
+| OSD / HUD bars (swayosd or wob) | 🟢 Nice to have | Not started |
 | Wallpaper | 🟢 Nice to have | Not started |
 | Cleanup orphaned terminals | 🟢 Nice to have | Not started |
 | t2fanrd decision | 🟢 Nice to have | ✅ Done |
