@@ -47,8 +47,8 @@ Gaps and planned changes to the current system setup, ordered by priority.
 - [x] Install `quickshell`
 - [x] Phase 1: Minimal bar with clock — bar renders on all monitors, clock ticks, `exec-once = quickshell` in Hyprland
 - [x] Phase 2: Workspaces + layout structure
-- [ ] Phase 3: System info (battery, volume, network)
-- [ ] Phase 4: Tray + polish
+- [x] Phase 3: System info — CPU, MEM, TEMP, battery, WiFi, Bluetooth all live
+- [ ] Phase 4: Volume widget + tray + polish
 - [ ] Phase 5: Theme switcher
 
 **Notes on quickshell**: It's newer and less documented than waybar. If the QML config becomes a blocker, waybar is a well-trodden fallback that can be swapped out later.
@@ -183,7 +183,7 @@ Switching only requires changing the DM — UWSM, Hyprland config, and all autos
 | Keyring daemon (gnome-keyring) | 🟢 Done | ✅ Token in keyring, hosts.yml clean |
 | Lock screen (hyprlock + hypridle) | 🟢 Done | ✅ hyprlock + hypridle configured |
 | Suspend (test + configure) | 🟢 Done | v8 — all sleeps replaced with udevadm settle, full resume working |
-| Status bar (quickshell) | 🟠 Medium | Phase 2 done — workspaces + layout + multi-monitor. Phase 3 next. |
+| Status bar (quickshell) | 🟠 Medium | Phase 3 done — CPU, MEM, TEMP, battery, WiFi, Bluetooth live. Phase 4 (volume + tray) next. |
 | Multi-monitor workspace strategy | ⚪ Optional | Not decided — bind to monitors, plugin, or leave floating |
 | Notification daemon (mako) | 🟠 Medium | Not started |
 | Browser migration (Brave) | 🟡 Planned | Not started |
