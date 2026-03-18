@@ -29,6 +29,14 @@ Item {
         anchors.rightMargin: Config.padding
         anchors.verticalCenter: parent.verticalCenter
         spacing: Config.spacing
+        Cpu {}
+        Separator {}
+        Mem {}
+        Separator {}
+        Temp {}
+        Separator {}
+        Bluetooth { id: btWidget }
+        Separator { visible: btWidget.visible; width: visible ? implicitWidth : 0 }
         Wifi {}
         Separator {}
         Battery {}

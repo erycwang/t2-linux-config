@@ -8,13 +8,12 @@ RowLayout {
 
     Text {
         text: {
-            if (!Wifi.connected) return "xxxx"
+            if (!Wifi.connected) return "xxx"
             let s = Wifi.signal
-            let b1 = s >= 25 ? "▂" : "░"
-            let b2 = s >= 50 ? "▄" : "░"
-            let b3 = s >= 75 ? "▆" : "░"
-            let b4 = s >= 90 ? "█" : "░"
-            return b1 + b2 + b3 + b4
+            let b1 = "▃"
+            let b2 = s >= 40 ? "▅" : "░"
+            let b3 = s >= 70 ? "█" : "░"
+            return b1 + b2 + b3
         }
         color: Wifi.connected ? "#cdd6f4" : "#f38ba8"
         font.pixelSize: Config.fontSize

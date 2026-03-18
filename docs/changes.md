@@ -6,10 +6,21 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ## 2026-03-18
 
+### quickshell bar — CPU, MEM, TEMP widgets + Bluetooth indicator
+
+- **CPU widget**: `services/Cpu.qml` reads `/proc/stat` every 1s, diffs successive idle/total values to compute usage %. Color: green < 50%, yellow 50–80%, red ≥ 80%.
+- **MEM widget**: `services/Mem.qml` reads `/proc/meminfo` every 1s, computes `(MemTotal - MemAvailable) / MemTotal`. Same color thresholds.
+- **TEMP widget**: `services/Temp.qml` polls `sensors -u coretemp-isa-0000` every 5s, parses `Package id 0` temp. Color: green < 60°, yellow 60–80°, red ≥ 80°.
+- **Bluetooth widget**: `widgets/Bluetooth.qml` uses native `Quickshell.Bluetooth` module (no polling). Shows `BT: N` when devices connected, hides entirely (with its separator) when none.
+- **Bar order**: `CPU | MEM | TEMP | BT | WiFi | Battery`
+- **Note**: `Quickshell.Networking` module exists in upstream master but not v0.2.1 — no SSID property anyway, nmcli polling is still the right approach.
+
+---
+
 ### quickshell bar — WiFi widget, battery charging color, transparency, separator
 
 - **WiFi widget**: Added `services/Wifi.qml` — polls `nmcli -t -f active,ssid,signal dev wifi` every 30s via `Quickshell.Io.Process`. Exposes `ssid`, `signal`, `connected` properties.
-- **WiFi display**: `widgets/Wifi.qml` shows `▂▄▆█ SSID` with signal bars (thresholds at 25/50/75/90%), `xxxx NO NETWORK` in red when disconnected. SSID capped at 12 chars.
+- **WiFi display**: `widgets/Wifi.qml` shows `▃▅█ SSID` with 3-bar signal strength (thresholds at 40%/70%), `xxx NO NETWORK` in red when disconnected. SSID capped at 12 chars. Dropped 4-bar design — `▆` renders as full height in monospace fonts.
 - **Separator widget**: Added `widgets/Separator.qml` — reusable `|` divider, use `Separator {}` between any widgets.
 - **Battery charging color**: Battery text turns green (`#a6e3a1`) when charging, replacing the previous white/lavender.
 - **Bar transparency**: `BarWrapper.qml` background set to 95% opacity via `Qt.rgba()` (hex colors don't support alpha readably).
