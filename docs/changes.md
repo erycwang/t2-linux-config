@@ -6,6 +6,19 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ## 2026-03-18
 
+### Notification daemon — mako
+
+- Installed `mako` (Wayland-native, minimal, no notification history panel)
+- Config at `mako/config`, symlinked to `~/.config/mako/config`
+- Style: Catppuccin Mocha palette (`#1e1e2e` bg, `#cdd6f4` text), `border-radius=12`, `anchor=top-right`, Noto Sans 11, 5s default timeout
+- Per-urgency rules: low → muted border (`#6c7086`), 3s timeout; normal → blue border (`#89b4fa`); high → red border + text (`#f38ba8`), no timeout (persists until dismissed)
+- `exec-once = mako` added to `hyprland.conf` autostart
+- Test: `notify-send "Test" "Hello world"`, reload config: `makoctl reload`
+
+---
+
+
+
 ### quickshell bar — CPU, MEM, TEMP widgets + Bluetooth indicator
 
 - **CPU widget**: `services/Cpu.qml` reads `/proc/stat` every 1s, diffs successive idle/total values to compute usage %. Color: green < 50%, yellow 50–80%, red ≥ 80%.

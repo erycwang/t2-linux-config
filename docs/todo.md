@@ -55,15 +55,10 @@ Gaps and planned changes to the current system setup, ordered by priority.
 
 ---
 
-### Notification daemon
+### Notification daemon ✅ Done
 
-**No notifications configured.** System events (low battery, package alerts, etc.) are silent.
-
-- Install `mako` (Wayland-native, minimal, config-file driven) or `dunst` (more featureful)
-- Add `exec-once = mako` to Hyprland config
-- Configure appearance and timeout
-
-**Note**: `mako` is the lighter choice and fits the current minimal setup style.
+- `mako` installed, autostarted via `exec-once = mako` in Hyprland
+- Config at `mako/config` (symlinked to `~/.config/mako/config`): Catppuccin Mocha palette, 12px border radius, per-urgency rules (low → muted, normal → blue, high → red + no timeout)
 
 ---
 
@@ -185,7 +180,7 @@ Switching only requires changing the DM — UWSM, Hyprland config, and all autos
 | Suspend (test + configure) | 🟢 Done | v8 — all sleeps replaced with udevadm settle, full resume working |
 | Status bar (quickshell) | 🟠 Medium | Phase 3 done — CPU, MEM, TEMP, battery, WiFi, Bluetooth live. Phase 4 (volume + tray) next. |
 | Multi-monitor workspace strategy | ⚪ Optional | Not decided — bind to monitors, plugin, or leave floating |
-| Notification daemon (mako) | 🟠 Medium | Not started |
+| Notification daemon (mako) | 🟢 Done | ✅ mako installed and configured |
 | Browser migration (Brave) | 🟡 Planned | Not started |
 | Screenshot tool | 🟢 Nice to have | ✅ Done |
 | OSD / HUD bars (swayosd or wob) | 🟢 Nice to have | Not started |
