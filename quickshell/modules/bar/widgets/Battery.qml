@@ -4,10 +4,10 @@ import "../../../config"
 
 Text {
     text: (Battery.charging ? "↑" : "") + Battery.percentage + "%"
-    color: Battery.charging ? "#a6e3a1"
-         : Battery.percentage < 15 ? "#f38ba8"
-         : Battery.percentage < 30 ? "#fab387"
-         : "#cdd6f4"
+    color: Battery.charging ? "#c3e88d"
+         : Battery.percentage < 15 ? "#ff757f"
+         : Battery.percentage < 30 ? "#ff966c"
+         : "#c8d3f5"
     font.pixelSize: Config.fontSize
     font.family: Config.fontFamily
 }

@@ -46,15 +46,15 @@ RowLayout {
             width: 24
             height: 24
             radius: 4
-            color: isActive ? "#cdd6f4" : "transparent"
+            color: isActive ? "#c8d3f5" : "transparent"
             border.width: isOnOtherMonitor ? 1 : 0
-            border.color: isOnOtherMonitor ? "#6c7086" : "transparent"
+            border.color: isOnOtherMonitor ? "#636da6" : "transparent"
 
             Text {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: parent.hasOffscreenWindows ? -2 : 0
                 text: parent.wsId
-                color: parent.isActive ? "#1e1e2e" : "#6c7086"
+                color: parent.isActive ? "#222436" : "#636da6"
                 font.pixelSize: 12
                 font.family: "monospace"
             }
@@ -68,7 +68,7 @@ RowLayout {
                 width: 4
                 height: 4
                 radius: 2
-                color: "#6c7086"
+                color: "#636da6"
             }
 
             MouseArea {

@@ -6,6 +6,33 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ## 2026-03-18
 
+### TokyoNight Moon theme applied across all components
+
+Replaced Catppuccin Mocha palette with TokyoNight Moon across the entire setup:
+- **quickshell bar**: BarWrapper bg (`#222436`), all widget colors updated — text (`#c8d3f5`), accent (`#82aaff`), muted (`#636da6`), green/yellow/orange/red status colors
+- **mako**: bg, text, border, urgency colors updated
+- **swayosd**: border, bg, progress bar colors updated
+- **hyprland.conf**: active border gradient updated to blue (`#82aaff`) + purple (`#c099ff`), inactive border to `#636da6`
+
+---
+
+### swayosd — OSD overlays for volume and brightness
+
+- Installed `swayosd` from `extra` repo (no AUR needed)
+- `exec-once = swayosd-server` added to Hyprland autostart
+- Volume/brightness keybinds replaced: `wpctl`/`brightnessctl` → `swayosd-client` (keyboard brightness stays on `brightnessctl`)
+- Custom CSS at `swayosd/style.css` (symlinked to `~/.config/swayosd/style.css`): TokyoNight Moon palette, `border-radius: 12px`
+
+---
+
+### Screenshot workflow — clipboard-first + satty annotation
+
+- `Super+Shift+X`: updated to `hyprshot -m region --clipboard-only` — screenshot goes to clipboard, no file saved
+- `Super+Shift+A`: new keybind — `wl-paste | satty --filename -` — opens clipboard screenshot in satty for annotation; save to file or re-copy from satty
+- Windowrule added: satty (`com.gabm.satty`) always opens as centered floating window at 1400×900
+
+---
+
 ### Notification daemon — mako
 
 - Installed `mako` (Wayland-native, minimal, no notification history panel)

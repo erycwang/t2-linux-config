@@ -4,9 +4,9 @@ import "../../../config"
 
 Text {
     text: Temp.temp + "°"
-    color: Temp.temp >= 80 ? "#f38ba8"
-         : Temp.temp >= 60 ? "#f9e2af"
-         : "#a6e3a1"
+    color: Temp.temp >= 80 ? "#ff757f"
+         : Temp.temp >= 60 ? "#ffc777"
+         : "#c3e88d"
     font.pixelSize: Config.fontSize
     font.family: Config.fontFamily
 }

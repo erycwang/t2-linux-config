@@ -3,7 +3,7 @@ import "../../../config"
 
 Text {
     text: "|"
-    color: "#cdd6f4"
+    color: "#c8d3f5"
     font.pixelSize: Config.fontSize
     font.family: Config.fontFamily
     leftPadding: 4

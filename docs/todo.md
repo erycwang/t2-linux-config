@@ -83,18 +83,11 @@ Gaps and planned changes to the current system setup, ordered by priority.
 
 ---
 
-### OSD / HUD bars
+### OSD / HUD bars ✅ Done
 
-Visual overlays for volume, brightness, and keyboard brightness on keypress. Common Wayland options:
-
-- `swayosd` (AUR: `swayosd-git`) — runs as a background service, handles volume/brightness/caps lock natively, integrates cleanly with Hyprland
-- `wob` — simpler pipe-based bar, requires wiring manually to each keybind
-
-Recommended: `swayosd` — less wiring, handles all three use cases out of the box.
-
-- Install and enable: `paru -S swayosd-git` + `exec-once = swayosd-server` in Hyprland config
-- Update volume/brightness keybinds to call `swayosd-client` instead of raw `wpctl`/`brightnessctl`
-- Add keyboard brightness keybind if not already present
+- `swayosd` installed from `extra` repo, `exec-once = swayosd-server` in Hyprland
+- Volume/brightness keybinds updated to use `swayosd-client` (keyboard brightness stays on `brightnessctl`)
+- Themed with TokyoNight Moon: `#222436` bg, `#82aaff` border + progress bar, config at `swayosd/style.css`
 
 ---
 
@@ -108,12 +101,11 @@ No clipboard history currently configured. `wl-clipboard` is installed but only 
 
 ---
 
-### Screenshot annotation
+### Screenshot annotation ✅ Done
 
-No annotation tool configured. Useful for marking up screenshots before sharing.
-
-- Install `satty` — Wayland-native annotation tool (arrows, text, blur, shapes)
-- Optionally wire into a new keybind that captures then opens in satty: `hyprshot -m region -r | satty --filename -`
+- `satty` installed; `Super+Shift+A` pipes clipboard into satty for annotation (`wl-paste | satty --filename -`)
+- `Super+Shift+X` updated to `--clipboard-only` — screenshot goes to clipboard, no file saved automatically
+- Windowrule added: satty opens as centered floating window (`com.gabm.satty`)
 
 ---
 
@@ -156,6 +148,28 @@ Switching only requires changing the DM — UWSM, Hyprland config, and all autos
 
 ---
 
+### Unified theming
+
+Single source of truth for the color palette across all applications — change one file, everything updates.
+
+**Applications to cover**: Hyprland borders, quickshell bar, mako, hyprlock, wofi, Ghostty, Neovim, possibly GTK/Qt apps.
+
+**Approach options**:
+- **`pywal` / `wal`** — generates theme files from a wallpaper or a base palette; has templates for most apps but requires wallpaper-driven workflow
+- **Manual base palette file** — single `theme.conf` or `colors.sh` sourced/imported by each app's config; full control, no magic
+- **`matugen`** — Material You palette generator, Hyprland ecosystem native, can output to multiple formats
+
+**Likely approach**: Define palette once in a central file (`theme/colors`), write per-app template scripts that read it and write out each app's config format. Or use `matugen` if wallpaper-driven theming is desired.
+
+**Scope**:
+- [ ] Decide: static palette file vs wallpaper-driven (pywal/matugen)
+- [ ] Wire up: Hyprland, quickshell, mako, hyprlock, wofi
+- [ ] Wire up: Ghostty terminal colors
+- [ ] Wire up: Neovim colorscheme (catppuccin already installed)
+- [ ] Optional: GTK theme (`nwg-look` or `gradience`)
+
+---
+
 ### Cleanup orphaned terminals
 
 - Kitty and Alacritty are installed but unused (Ghostty is primary)
@@ -183,11 +197,12 @@ Switching only requires changing the DM — UWSM, Hyprland config, and all autos
 | Notification daemon (mako) | 🟢 Done | ✅ mako installed and configured |
 | Browser migration (Brave) | 🟡 Planned | Not started |
 | Screenshot tool | 🟢 Nice to have | ✅ Done |
-| OSD / HUD bars (swayosd or wob) | 🟢 Nice to have | Not started |
+| OSD / HUD bars (swayosd) | 🟢 Done | ✅ swayosd installed, TokyoNight Moon themed |
 | Clipboard manager (cliphist) | 🟢 Nice to have | Not started |
-| Screenshot annotation (satty) | 🟢 Nice to have | Not started |
+| Screenshot annotation (satty) | 🟢 Done | ✅ satty installed, Super+Shift+A to annotate clipboard |
 | Suspend hook migration | 🟢 Nice to have | Not started — migrate service to sleep hook |
 | Display manager migration (greetd) | ⚪ Optional | Not started — see display-manager-architecture.md |
 | Wallpaper | 🟢 Nice to have | Not started |
+| Unified theming | ⚪ Optional | Not started — single palette source for all apps |
 | Cleanup orphaned terminals | 🟢 Nice to have | Not started |
 | t2fanrd decision | 🟢 Nice to have | ✅ Done |

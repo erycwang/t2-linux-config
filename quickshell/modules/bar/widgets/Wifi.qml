@@ -15,7 +15,7 @@ RowLayout {
             let b3 = s >= 70 ? "█" : "░"
             return b1 + b2 + b3
         }
-        color: Wifi.connected ? "#cdd6f4" : "#f38ba8"
+        color: Wifi.connected ? "#c8d3f5" : "#ff757f"
         font.pixelSize: Config.fontSize
         font.family: Config.fontFamily
     }
@@ -26,7 +26,7 @@ RowLayout {
             let name = Wifi.ssid
             return name.length > 12 ? name.substring(0, 12) + "…" : name
         }
-        color: Wifi.connected ? "#cdd6f4" : "#f38ba8"
+        color: Wifi.connected ? "#c8d3f5" : "#ff757f"
         font.pixelSize: Config.fontSize
         font.family: Config.fontFamily
     }
