@@ -16,7 +16,7 @@ Variants {
         }
 
         implicitHeight: Config.barHeight
-        color: Qt.rgba(0x22/255, 0x24/255, 0x36/255, 0.95)
+        color: Colors.bgAlpha
 
         Bar { screen: modelData }
     }

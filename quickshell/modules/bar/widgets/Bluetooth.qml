@@ -15,7 +15,7 @@ Text {
     width: visible ? implicitWidth : 0
 
     text: "BT: " + connectedCount
-    color: "#c8d3f5"
+    color: Colors.fg
     font.pixelSize: Config.fontSize
     font.family: Config.fontFamily
 }

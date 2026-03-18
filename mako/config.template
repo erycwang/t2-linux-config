@@ -9,9 +9,9 @@ border-size=2
 border-radius=12
 default-timeout=5000
 
-background-color=#282828
-text-color=#d4be98
-border-color=#7daea3
+background-color=${bg}
+text-color=${fg}
+border-color=${accent}
 
 font=Noto Sans 11
 format=<b>%s</b>\n%b
@@ -20,14 +20,14 @@ icons=1
 max-icon-size=32
 
 [urgency=low]
-border-color=#7c6f64
+border-color=${muted}
 default-timeout=3000
 
 [urgency=normal]
-border-color=#7daea3
+border-color=${accent}
 
 [urgency=high]
-border-color=#ea6962
+border-color=${red}
 default-timeout=0
-background-color=#282828
-text-color=#d4be98
+background-color=${bg}
+text-color=${fg}

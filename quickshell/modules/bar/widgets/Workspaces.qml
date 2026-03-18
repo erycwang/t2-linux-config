@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
+import "../../../config"
 
 RowLayout {
     property var screen  // ShellScreen passed from Bar
@@ -46,15 +47,15 @@ RowLayout {
             width: 24
             height: 24
             radius: 4
-            color: isActive ? "#c8d3f5" : "transparent"
+            color: isActive ? Colors.fg : "transparent"
             border.width: isOnOtherMonitor ? 1 : 0
-            border.color: isOnOtherMonitor ? "#636da6" : "transparent"
+            border.color: isOnOtherMonitor ? Colors.muted : "transparent"
 
             Text {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: parent.hasOffscreenWindows ? -2 : 0
                 text: parent.wsId
-                color: parent.isActive ? "#222436" : "#636da6"
+                color: parent.isActive ? Colors.bg : Colors.muted
                 font.pixelSize: 12
                 font.family: "monospace"
             }
@@ -68,7 +69,7 @@ RowLayout {
                 width: 4
                 height: 4
                 radius: 2
-                color: "#636da6"
+                color: Colors.muted
             }
 
             MouseArea {
