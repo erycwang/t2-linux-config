@@ -31,7 +31,7 @@ quickshell/
 
 ## Files to Create
 
-### `quickshell/services/qmldir`
+### `quickshell/services/qmldir` (partially done — Battery registered)
 ```
 singleton Audio 1.0 Audio.qml
 singleton Battery 1.0 Battery.qml
@@ -62,7 +62,7 @@ QtObject {
 
 Note: If `Pipewire.defaultSink` doesn't compile, try `Pipewire.defaultAudioSink` — check Quickshell version.
 
-### `quickshell/services/Battery.qml`
+### `quickshell/services/Battery.qml` ✅ DONE
 ```qml
 pragma Singleton
 import QtQuick
@@ -70,11 +70,13 @@ import Quickshell.Services.UPower
 
 QtObject {
     property var device: UPower.displayDevice
-    property int percentage: Math.round(device?.percentage ?? 0)
+    property int percentage: Math.round((device?.percentage ?? 0) * 100)
     property bool charging: device?.state === UPowerDeviceState.Charging
                          || device?.state === UPowerDeviceState.FullyCharged
 }
 ```
+
+> **Note:** UPower percentage via Quickshell is 0.0–1.0, not 0–100. Multiply by 100.
 
 ### `quickshell/services/Network.qml`
 Uses `Process` + `nmcli` polling every 5s. More reliable than the Quickshell.Networking module for getting the active SSID.
@@ -149,7 +151,7 @@ Text {
 }
 ```
 
-### `quickshell/modules/bar/widgets/Battery.qml`
+### `quickshell/modules/bar/widgets/Battery.qml` ✅ DONE
 `↑87%` when charging, `87%` otherwise. Red below 15%, amber below 30%.
 
 ```qml
@@ -161,7 +163,7 @@ Text {
     text: (Battery.charging ? "↑" : "") + Battery.percentage + "%"
     color: Battery.percentage < 15 ? "#f38ba8"
          : Battery.percentage < 30 ? "#fab387"
-         : "white"
+         : "#cdd6f4"
     font.pixelSize: Config.fontSize
     font.family: Config.fontFamily
 }

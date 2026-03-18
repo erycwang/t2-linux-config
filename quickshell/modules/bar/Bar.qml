@@ -23,10 +23,12 @@ Item {
         Clock {}
     }
 
-    // Right: placeholder for Phase 3 (battery, volume, network)
+    // Right: system info
     RowLayout {
         anchors.right: parent.right
         anchors.rightMargin: Config.padding
         anchors.verticalCenter: parent.verticalCenter
+        spacing: Config.spacing
+        Battery {}
     }
 }

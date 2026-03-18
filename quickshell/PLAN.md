@@ -78,11 +78,11 @@ Minimal viable bar. No theming, no services, no system info. Just validates the 
 9. Create `modules/bar/widgets/Workspaces.qml` — `Repeater` over `Hyprland.workspaces`, highlight active, click to switch
 10. **Test**: workspaces highlight on switch, click to jump works
 
-### Phase 3: System info (volume + battery + network)
+### Phase 3: System info (volume + battery + network) ← IN PROGRESS
 
 11. Create `services/Audio.qml` — PipeWire singleton; exposes `volume`, `muted`, `setVolume()`, `toggleMute()`; `services/qmldir`
 12. Create `modules/bar/widgets/Volume.qml` — icon + percentage, scroll to adjust
-13. Create `modules/bar/widgets/Battery.qml` — UPower capacity + charging icon
+13. ~~Create `modules/bar/widgets/Battery.qml` — UPower capacity + charging icon~~ ✅ Done
 14. Create `services/Network.qml` — `Process` polling `nmcli` for SSID and connection state
 15. Create `modules/bar/widgets/Network.qml` — connected/disconnected + SSID label
 16. **Test**: volume changes reflect live, battery shows state, network shows SSID
