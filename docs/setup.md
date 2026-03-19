@@ -60,7 +60,7 @@
 | **Wallpaper** | — | Using Hyprland default |
 | **Screen lock** | hyprlock | ✅ `Super+Shift+L`; blurred screenshot + clock |
 | **Idle/suspend daemon** | hypridle | ✅ 2 min dim → 3 min lock → 10 min suspend |
-| **Clipboard** | wl-clipboard + cliphist | ✅ clipboard history via `Super+C` |
+| **Clipboard** | wl-clipboard | ✅ |
 | **Polkit agent** | hyprpolkitagent (at `/usr/local/libexec/`) | ✅ |
 
 ---
