@@ -98,13 +98,11 @@ Gaps and planned changes to the current system setup, ordered by priority.
 
 ---
 
-### Clipboard manager
+### Clipboard manager ✅ Done
 
-No clipboard history currently configured. `wl-clipboard` is installed but only provides basic copy/paste with no history.
-
-- Install `cliphist` — lightweight Wayland clipboard history daemon
-- Add to Hyprland autostart: `exec-once = wl-paste --type text --watch cliphist store`
-- Bind a key to open history picker: `bind = $mainMod, C, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy`
+- Installed `cliphist` — lightweight Wayland clipboard history daemon
+- Added to Hyprland autostart: `exec-once = wl-paste --type text --watch cliphist store`
+- Bound `Super+C` to open history picker: `cliphist list | wofi --dmenu | cliphist decode | wl-copy`
 
 ---
 
@@ -191,7 +189,7 @@ Single source of truth for the color palette across all applications — change 
 | Notification daemon (mako) | 🟢 Done | ✅ mako installed and configured |
 | Screenshot tool | 🟢 Done | ✅ Done |
 | OSD / HUD bars (swayosd) | 🟢 Done | ✅ swayosd installed, TokyoNight Moon themed |
-| Clipboard manager (cliphist) | 🟢 Nice to have | Not started |
+| Clipboard manager (cliphist) | 🟢 Done | ✅ Done — cliphist + wofi integration |
 | Screenshot annotation (satty) | 🟢 Done | ✅ satty installed, Super+Shift+A to annotate clipboard |
 | Notification click-to-focus | 🟢 Nice to have | Pending — mako on-button-left action + window ID hint |
 | Suspend hook migration | 🟢 Nice to have | Not started — migrate service to sleep hook |
