@@ -6,6 +6,16 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ## 2026-03-19
 
+### Theming — Gruvbox Material Dark GTK + qt6ct color schemes
+
+- **GTK theme**: Switched from `gruvbox-dark-gtk` to `Gruvbox-Material-Dark` (AUR: `gruvbox-material-gtk-theme-git`). Updated `GTK_THEME` env var in `hyprland.conf`. Applies to Brave's file picker dialog and other GTK apps.
+- **qt6ct color schemes**: Rewrote `Gruvbox.colors` (was in KDE `.colors` format, invisible to qt6ct) and added `gruvbox-material-dark.conf`. qt6ct requires `.conf` extension and QPalette ARGB format (`#ffRRGGBB`, 21 comma-separated values per state). Files stored in `qt6ct/colors/` in repo; deploy to `~/.config/qt6ct/colors/`.
+- **Note**: Dolphin is a Qt app — GTK theme has no effect on it. Qt theming is controlled entirely by qt6ct.
+
+---
+
+
+
 ### Hyprland — inactive opacity exclusion for Brave
 
 - Added `windowrule = opacity 1.0 override 1.0 override 1.0, match:class brave-browser` to exempt Brave from the global `inactive_opacity = 0.88`

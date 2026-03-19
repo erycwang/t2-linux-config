@@ -86,11 +86,11 @@
 | Component | Setup |
 |---|---|
 | **Qt theme engine** | qt6ct (`QT_QPA_PLATFORMTHEME=qt6ct` in hyprland env) |
-| **Qt color scheme** | Gruvbox — `kde-gruvbox-git` installs to `/usr/share/color-schemes/`; copied to `~/.config/qt6ct/colors/` for qt6ct to pick up |
-| **GTK theme** | `gruvbox-dark-gtk` (AUR) — applied via `GTK_THEME=gruvbox-dark-gtk` env var in hyprland.conf and `gsettings set org.gnome.desktop.interface gtk-theme gruvbox-dark-gtk` |
+| **Qt color scheme** | `qt6ct/colors/` in repo — `Gruvbox.conf` (classic gruvbox) and `gruvbox-material-dark.conf`; deploy to `~/.config/qt6ct/colors/`. qt6ct requires `.conf` extension and QPalette ARGB format. |
+| **GTK theme** | `Gruvbox-Material-Dark` (AUR: `gruvbox-material-gtk-theme-git`) — applied via `GTK_THEME=Gruvbox-Material-Dark` env var in hyprland.conf |
 | **GTK config** | `~/.config/gtk-3.0/settings.ini` and `~/.config/gtk-4.0/settings.ini` set theme for apps not using gsettings |
 
-> **Note**: Brave's file picker dialog uses GTK directly (not xdg-desktop-portal-gtk). Theming it requires `GTK_THEME` env var — gsettings alone is insufficient because the env var takes priority and Brave must inherit it from Hyprland.
+> **Note**: Brave's file picker dialog uses GTK directly (not xdg-desktop-portal-gtk). Theming it requires `GTK_THEME` env var — Brave must inherit it from Hyprland.
 >
 > **Note**: Brave uses two window classes — `brave-browser` for browser windows, `brave` for native OS dialogs. Hyprland windowrules must use `brave-browser` to target browser windows.
 
