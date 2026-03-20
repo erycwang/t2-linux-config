@@ -190,6 +190,25 @@ When apps (like Brave) call "Show in folder", they use the `inode/directory` MIM
 
 ---
 
+## Quickshell — Hyprland IPC patterns
+
+Patterns learned from building the bar widgets:
+
+| Need | Approach |
+|---|---|
+| Reactive workspace/monitor state | Use first-class properties: `monitor.activeWorkspace`, `Hyprland.workspaces`, `Hyprland.monitors` |
+| Special workspace active state | `HyprlandMonitor` does NOT expose `specialWorkspace` — use `Hyprland.rawEvent` |
+| One-time init from raw IPC JSON | `monitor.lastIpcObject.specialWorkspace.id` — accurate at startup, not reactive |
+| Reactive event-driven state | `Connections { target: Hyprland; function onRawEvent(event) { ... } }` |
+| Parsing IPC event args | `event.parse(n)` where `n` = expected arg count — required because some args contain commas |
+| Reference from inside Connections | Use explicit `id` on the parent item — `parent` is unreliable inside Connections handlers |
+
+**`activespecial` event**: fires when a special workspace is toggled. `event.parse(2)` → `[workspaceName, monitorName]`. Empty `workspaceName` means deactivated.
+
+**Special workspace behavior**: toggling a special workspace does NOT change `monitor.activeWorkspace` — the underlying regular workspace stays active. The special workspace is an overlay.
+
+---
+
 ## Notes
 
 - Configs symlinked from `~/.config/` to this repo (repo is source of truth): `hypr/`, `nvim/`, `ghostty/`. Hyprland's inotify-based config watcher does not detect changes through symlinks, so auto-reload stopped working. Fixed upstream in [hyprwm/Hyprland#9219](https://github.com/hyprwm/Hyprland/pull/9219) (merged 2025-01-31). If still broken, use `Super+Shift+]` to manually reload (`hyprctl reload`).

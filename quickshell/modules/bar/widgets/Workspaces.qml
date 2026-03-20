@@ -13,7 +13,7 @@ RowLayout {
     property int activeWsId: monitor?.activeWorkspace?.id ?? -1
 
     Repeater {
-        model: 9
+        model: 10
         delegate: Rectangle {
             required property int index
             property int wsId: index + 1
@@ -76,6 +76,51 @@ RowLayout {
                 anchors.fill: parent
                 onClicked: Hyprland.dispatch("workspace " + parent.wsId)
             }
+        }
+    }
+
+    // Special workspace indicator
+    Rectangle {
+        id: specialWsIndicator
+        property bool specialActive: (monitor?.lastIpcObject?.specialWorkspace?.id ?? 0) !== 0
+        property bool isActive: specialActive
+        property bool hasWindows: {
+            var workspaces = Hyprland.workspaces.values
+            for (var i = 0; i < workspaces.length; i++) {
+                if (workspaces[i].id < 0) return true
+            }
+            return false
+        }
+
+        Connections {
+            target: Hyprland
+            function onRawEvent(event) {
+                if (event.name === "activespecial") {
+                    var args = event.parse(2)  // args[0]=workspace name, args[1]=monitor name
+                    if (args[1] === monitor?.name) {
+                        specialWsIndicator.specialActive = args[0] !== ""
+                    }
+                }
+            }
+        }
+
+        visible: isActive || hasWindows
+        width: 24
+        height: 24
+        radius: 4
+        color: isActive ? Colors.fg : "transparent"
+
+        Text {
+            anchors.centerIn: parent
+            text: "·"
+            color: parent.isActive ? Colors.bg : Colors.muted
+            font.pixelSize: 18
+            font.family: "monospace"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: Hyprland.dispatch("togglespecialworkspace")
         }
     }
 }

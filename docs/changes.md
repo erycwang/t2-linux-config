@@ -4,6 +4,36 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ---
 
+## 2026-03-20
+
+### Quickshell — workspace bar improvements
+
+- Added workspace 10 to the repeater (was capped at 9)
+- Added special workspace dot indicator: appears when any special workspace exists, highlights when active
+- Special workspace detection uses `Hyprland.rawEvent` listening for `activespecial` IPC events (args[0]=workspace name, args[1]=monitor name) — empty name means deactivated
+- Initial state seeds from `monitor.lastIpcObject.specialWorkspace.id` at startup
+- **Key learnings**:
+  - `HyprlandMonitor` does not expose `specialWorkspace` as a first-class property — only `activeWorkspace`
+  - `lastIpcObject` has the full raw IPC JSON but is not reactive to state changes — only accurate at initialization
+  - Use `Hyprland.rawEvent` + `event.parse(n)` for reactive event-driven state updates
+  - `activeWorkspace` never changes when a special workspace is toggled — it stays on the underlying regular workspace
+  - Inside a `Connections` block, use an explicit `id` reference rather than `parent` to avoid binding issues
+
+### Hyprland — monitor scale + blur tuning
+
+- `eDP-1` scale updated from `1.25` → `1.33`
+- Blur: `size 15, passes 1` → `size 7, passes 2` (sharper, more performant)
+
+### Ghostty — background opacity
+
+- `background-opacity` reduced from `0.92` → `0.88`
+
+### Weather widget — icon color
+
+- Weather icon color changed from `Colors.accent` (teal) to `Colors.fg` (matches text)
+
+---
+
 ## 2026-03-19
 
 ### Weather widget — icon fixes and full wttr.in code mapping
