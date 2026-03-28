@@ -73,11 +73,11 @@
 | **GPG agent** | gpg-agent (systemd user socket activation; also handles SSH via gpg-agent-ssh.socket) |
 | **SSH agent** | gpg-agent (no separate ssh-agent; uses gpg-agent SSH emulation) |
 
-> **Note**: Shell config (`~/.config/fish/config.fish`) sets `EDITOR=ghostty` for Yazi and other TUI tools, and `SSH_AUTH_SOCK` to gpg-agent socket (required for SSH auth via gpg-agent).
+> **Note**: Shell config (`~/.config/fish/config.fish`) sets `SSH_AUTH_SOCK` to gpg-agent socket (required for SSH auth via gpg-agent).
 > ```fish
-> set -x EDITOR ghostty
 > set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 > ```
+> `EDITOR=nvim`, `VISUAL=nvim`, and `TERMINAL=ghostty` are set in `hyprland.conf` env block so they apply to all child processes.
 
 ---
 
@@ -213,6 +213,6 @@ Patterns learned from building the bar widgets:
 
 - Configs symlinked from `~/.config/` to this repo (repo is source of truth): `hypr/`, `nvim/`, `ghostty/`. Hyprland's inotify-based config watcher does not detect changes through symlinks, so auto-reload stopped working. Fixed upstream in [hyprwm/Hyprland#9219](https://github.com/hyprwm/Hyprland/pull/9219) (merged 2025-01-31). If still broken, use `Super+Shift+]` to manually reload (`hyprctl reload`).
 - Monitors configured in `hyprland.conf`: `eDP-1` (internal, 1.07x scale), `DP-2` (external, 1.2x scale, centered above)
-- Terminal set to `ghostty`, file manager `dolphin`, launcher `wofi`, browser `firefox` in Hyprland config
+- Terminal set to `ghostty`, file manager `dolphin`, launcher `wofi`, browser `firefox` in Hyprland config; `TERMINAL=ghostty`, `EDITOR=nvim`, `VISUAL=nvim` set as env vars
 - `kidletime` (KDE idle detection library) is installed but not actively managing idle/suspend
 - Kitty and Alacritty are installed but likely leftovers (Ghostty is the primary terminal)

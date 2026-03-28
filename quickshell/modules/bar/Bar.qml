@@ -8,13 +8,15 @@ Item {
     property var screen  // ShellScreen from BarWrapper
     anchors.fill: parent
 
-    // Left: workspaces
+    // Left: workspaces + focused app
     RowLayout {
         anchors.left: parent.left
         anchors.leftMargin: Config.padding
         anchors.verticalCenter: parent.verticalCenter
         spacing: Config.spacing
         Workspaces { screen: root.screen }
+        Separator { visible: focusedWindow.visible; width: visible ? implicitWidth : 0 }
+        FocusedWindow { id: focusedWindow }
     }
 
     // Center: clock + date (truly centered, unaffected by left/right widths)
