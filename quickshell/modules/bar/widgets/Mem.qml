@@ -3,7 +3,7 @@ import "../../../services"
 import "../../../config"
 
 Text {
-    text: "MEM " + Mem.usage + "%"
+    text: "MEM " + Mem.usage.toString().padStart(3, ' ') + "%"
     color: Mem.usage >= 80 ? Colors.red
          : Mem.usage >= 50 ? Colors.yellow
          : Colors.green
