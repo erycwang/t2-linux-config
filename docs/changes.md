@@ -30,6 +30,7 @@ sudo systemctl enable --now rtkit-daemon
 - Tried LDAC (`a2dp-sink`) first but it requires RT scheduling to run cleanly — switched to AAC (`a2dp-sink-aac`) which is less demanding and lower latency
 - After RT fix, LDAC is also viable if preferred: `pactl set-card-profile bluez_card.38_18_4C_4B_25_6A a2dp-sink`
 - WirePlumber state file at `~/.local/state/wireplumber/default-profile` persists the chosen profile across reboots
+- **Final validated state**: LDAC (`a2dp-sink`) running stutter-free with RT scheduling active. No `mod.rt` errors in `journalctl --user -u pipewire` after fix.
 
 ---
 
