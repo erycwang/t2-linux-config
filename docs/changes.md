@@ -4,6 +4,20 @@ A running log of changes made to this system — what was added, removed, or mod
 
 ---
 
+## 2026-03-30
+
+### hyprland — fix lid switch scale out of sync with monitor config
+
+**Symptom**: Opening the laptop lid after suspend re-enabled eDP-1 at scale 1.25 instead of 1.33, causing a brief layout recalculation.
+
+**Root cause**: The `switch:off:Lid Switch` binding hardcodes the eDP-1 scale. When the monitor config scale was bumped from 1.25 → 1.33 in a later commit, the lid switch binding was not updated.
+
+**Fix**: Changed scale in lid switch binding to match `monitor = eDP-1` line.
+
+> **Note**: These two settings must stay in sync — see `setup.md` § Monitor scale.
+
+---
+
 ## 2026-03-28
 
 ### swayosd — add user to `input` and `uinput` groups

@@ -261,7 +261,15 @@ Patterns learned from building the bar widgets:
 ## Notes
 
 - Configs symlinked from `~/.config/` to this repo (repo is source of truth): `hypr/`, `nvim/`, `ghostty/`. Hyprland's inotify-based config watcher does not detect changes through symlinks, so auto-reload stopped working. Fixed upstream in [hyprwm/Hyprland#9219](https://github.com/hyprwm/Hyprland/pull/9219) (merged 2025-01-31). If still broken, use `Super+Shift+]` to manually reload (`hyprctl reload`).
-- Monitors configured in `hyprland.conf`: `eDP-1` (internal, 1.07x scale), `DP-2` (external, 1.2x scale, centered above)
+- Monitors configured in `hyprland.conf`: `eDP-1` (internal, 1.33x scale), `DP-2` (external, 1.07x scale, centered above)
+
+### Monitor scale
+
+**Two places must stay in sync** whenever eDP-1 scale changes:
+1. `monitor = eDP-1, preferred, auto, <scale>` — sets scale at startup
+2. `bindl = , switch:off:Lid Switch, exec, hyprctl keyword monitor eDP-1,preferred,auto,<scale>` — re-applies scale when lid opens
+
+If they drift, opening the lid after suspend will momentarily apply the wrong scale and trigger a layout recalculation.
 - Terminal set to `ghostty`, file manager `dolphin`, launcher `wofi`, browser `firefox` in Hyprland config; `TERMINAL=ghostty`, `EDITOR=nvim`, `VISUAL=nvim` set as env vars
 - **PipeWire RT scheduling**: requires `realtime-privileges` + `rtkit` packages, user in `realtime` group, and `rtkit-daemon` enabled. Without this, `mod.rt: could not set nice-level to -11: Permission denied` appears every boot and demanding codecs (LDAC) stutter. Set profile via `pactl set-card-profile <card> <profile>` — not `wpctl set-profile` (wpctl uses numeric indices, pactl uses names).
 - **WH-1000XM3 Bluetooth**: using AAC profile (`a2dp-sink-aac`). LDAC (`a2dp-sink`) also works now that RT scheduling is fixed but has higher latency. Profile persisted in `~/.local/state/wireplumber/default-profile`.
