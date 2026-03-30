@@ -83,34 +83,83 @@
 
 ## Theming
 
+Three separate theming layers — Qt, GTK, and libadwaita — each managed independently:
+
+| Layer | Affects | Managed by |
+|---|---|---|
+| **Qt** | Dolphin, Brave file picker (uses Qt shim) | qt6ct |
+| **GTK3** | GTK3 apps | nwg-look → `~/.config/gtk-3.0/settings.ini` |
+| **GTK4** | GTK4 apps | nwg-look → `~/.config/gtk-4.0/settings.ini` + CSS symlink |
+| **libadwaita dark mode** | Satty file picker and other libadwaita apps | gsettings `color-scheme` |
+
 ### Qt (qt6ct + Dolphin)
 
 | Component | Setup |
 |---|---|
 | **Qt theme engine** | qt6ct (`QT_QPA_PLATFORMTHEME=qt6ct` in hyprland.conf env) |
 | **Qt color scheme** | `qt6ct/colors/` in repo — `Gruvbox.conf` and `gruvbox-material-dark.conf`; deploy to `~/.config/qt6ct/colors/`. qt6ct requires `.conf` extension and QPalette ARGB format. |
-| **Dolphin KDE colors** | `~/.config/dolphinrc` → `ColorScheme=GruvboxMaterialDark` — points to `~/.local/share/color-schemes/GruvboxMaterialDark.colors`. Dolphin is a KDE app and uses KDE-specific color roles (sidebar, headers, hover states) on top of the Qt palette; these come from the `.colors` file, not qt6ct. |
+| **Dolphin KDE colors** | `~/.config/dolphinrc` → `ColorScheme=Gruvbox-Native-Dark` — points to `~/.local/share/color-schemes/Gruvbox-Native-Dark.colors` (extracted from Gruvbox-GTK-Theme SASS palette). Dolphin is a KDE app and uses KDE-specific color roles (sidebar, headers, hover states) on top of the Qt palette; these come from the `.colors` file, not qt6ct. |
+| **Dolphin icons** | `~/.config/kdeglobals` → `[Icons]` section → `Theme=Adwaita`. KDE reads icons from kdeglobals, not from dolphinrc. |
 
-> **Note**: Dolphin has a known bug where it ignores qt6ct palette colors directly ([KDE Bug](https://www.mail-archive.com/kde-bugs-dist@kde.org/msg1019025.html)). The two-layer approach (qt6ct for Qt palette + KDE `.colors` file for KDE-specific roles) is required for full theming. Both files use the same Gruvbox Material Dark palette.
+> **Note**: Dolphin has a known bug where it ignores qt6ct palette colors directly ([KDE Bug](https://www.mail-archive.com/kde-bugs-dist@kde.org/msg1019025.html)). The two-layer approach (qt6ct for Qt palette + KDE `.colors` file for KDE-specific roles) is required for full theming. The Gruvbox-Native-Dark color scheme is extracted from the Gruvbox-GTK-Theme SASS palette for color coherence with GTK apps.
+
+> **Note**: Brave's file picker uses Qt (via `/opt/brave-bin/libqt6_shim.so`), not GTK or xdg-desktop-portal. It inherits qt6ct theming automatically.
+
+#### Dolphin full theming setup
+
+To apply a unified GTK + KDE theme to Dolphin:
+
+1. **Extract color palette** from Gruvbox-GTK-Theme SASS files (`themes/src/sass/_color-palette-default.scss` and `_colors.scss`) into a KDE `.colors` file:
+   ```bash
+   # Create ~/.local/share/color-schemes/Gruvbox-Native-Dark.colors with KDE color scheme format
+   # (see file structure in ~/.local/share/color-schemes/ for examples)
+   ```
+
+2. **Apply color scheme** in `~/.config/dolphinrc`:
+   ```ini
+   [UiSettings]
+   ColorScheme=Gruvbox-Native-Dark
+   ```
+
+3. **Set icon theme** in `~/.config/kdeglobals` (KDE global config):
+   ```ini
+   [Icons]
+   Theme=Adwaita
+   ```
+
+4. **Verify** — restart Dolphin. Colors should match your GTK theme, and icons should reflect the icon theme set in kdeglobals.
 
 ### GTK
 
-GTK theming is split across multiple mechanisms depending on the app:
+GTK theming comes from two sources:
 
-| Mechanism | File | Affects |
-|---|---|---|
-| `GTK_THEME` env var | `hyprland.conf` → `env = GTK_THEME,Gruvbox-Material-Dark` | GTK3 + GTK4 apps that inherit Hyprland's env (Brave file picker, most apps) |
-| GTK4 CSS | `/usr/share/themes/Gruvbox-Material-Dark/gtk-4.0/gtk.css` | GTK4/libadwaita apps (Ghostty dialogs, etc.) — loaded automatically when `GTK_THEME` is set |
-| GTK3 settings | `~/.config/gtk-3.0/settings.ini` | GTK3 apps not using gsettings |
-| GTK4 settings | `~/.config/gtk-4.0/settings.ini` | GTK4 apps not using gsettings |
+**Primary theme (nwg-look managed)**:
+GTK3 and GTK4 are configured via **nwg-look**, which writes to `settings.ini` for both versions and handles the GTK4 CSS symlink.
 
-**Theme package**: `gruvbox-material-gtk-theme-git` (AUR) — installs to `/usr/share/themes/Gruvbox-Material-Dark/`
+| Component | Setup |
+|---|---|
+| **GTK3 theme** | `Gruvbox-Native-Dark` — set via nwg-look → `~/.config/gtk-3.0/settings.ini` |
+| **GTK4 theme** | `Gruvbox-Native-Dark` — set via nwg-look → `~/.config/gtk-4.0/settings.ini` |
+| **GTK4 CSS** | `~/.config/gtk-4.0/gtk.css` symlinked from the active theme |
 
-> **Note**: To apply GTK_THEME changes, a full Hyprland restart is required — `hyprctl reload` is not sufficient since env vars set at session start are inherited by all child processes and cannot be updated mid-session.
->
-> **Note**: Brave's file picker dialog uses GTK directly (not xdg-desktop-portal-gtk). Theming it requires the `GTK_THEME` env var — Brave must inherit it from Hyprland at launch.
->
-> **Note**: Brave uses two window classes — `brave-browser` for browser windows, `brave` for native OS dialogs. Hyprland windowrules must use `brave-browser` to target browser windows.
+**Alternative theme source (Gruvbox-GTK-Theme)**:
+The [Gruvbox-GTK-Theme](https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme) repo in this project (`/Gruvbox-GTK-Theme/`) provides icons and additional GTK theme variants. The `gruvbox-dark-gtk` theme is available at `/usr/share/themes/gruvbox-dark-gtk/` and affects non-Brave GTK dialogs and file pickers.
+
+> **Note**: Dolphin uses the KDE color scheme system, not GTK theme engine directly. However, its color scheme (`Gruvbox-Native-Dark.colors`) is derived from the same Gruvbox-GTK-Theme SASS palette as the GTK theme, ensuring visual consistency across the desktop.
+
+### libadwaita
+
+libadwaita apps (e.g. satty) ignore GTK theme settings entirely and only respond to the system color scheme preference. Set once via gsettings:
+
+```bash
+# Apply dark mode (current setting)
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+# Revert to system default (light)
+gsettings set org.gnome.desktop.interface color-scheme 'default'
+```
+
+This setting persists in dconf and survives reboots — no need to add it to `exec-once`.
 
 ---
 

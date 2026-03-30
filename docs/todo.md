@@ -155,13 +155,16 @@ Switching only requires changing the DM — UWSM, Hyprland config, and all autos
 
 ---
 
-### Unified theming ✅ Done (colors)
+### Unified theming ✅ Done (colors + Dolphin)
 
 Single source of truth for the color palette across all applications — change one file, everything updates.
 
-**Applications to cover**: Hyprland borders, quickshell bar, mako, hyprlock, wofi, Ghostty, Neovim, possibly GTK/Qt apps.
+**Applications to cover**: Hyprland borders, quickshell bar, mako, hyprlock, wofi, Ghostty, Neovim, GTK apps, KDE apps (Dolphin).
 
-**Completed**: Color palette defined and applied across Hyprland, quickshell, mako, swayosd, hyprlock (TokyoNight Moon theme)
+**Completed**:
+- Color palette defined and applied across Hyprland, quickshell, mako, swayosd, hyprlock (TokyoNight Moon theme)
+- GTK theming: Gruvbox-Native-Dark applied via nwg-look
+- **Dolphin full theming**: Color scheme (`Gruvbox-Native-Dark.colors`, extracted from Gruvbox-GTK-Theme SASS palette) + icons (Adwaita via kdeglobals) — see `setup.md` § Dolphin full theming setup for process
 
 ---
 
@@ -199,6 +202,6 @@ Single source of truth for the color palette across all applications — change 
 | Multi-monitor workspace strategy | ⚪ Optional | Not decided — bind to monitors, plugin, or leave floating |
 | Browser migration (Brave) | 🟢 Done | ✅ Done |
 | Wallpaper | 🟢 Done | ✅ Done |
-| Unified theming | 🟢 Done | ✅ Done — TokyoNight Moon applied |
+| Unified theming | 🟢 Done | ✅ Done — Gruvbox-Native-Dark (GTK + KDE/Dolphin); extracted SASS palette for color coherence |
 | Cleanup orphaned terminals | 🟢 Nice to have | Not started |
 | t2fanrd decision | 🟢 Nice to have | ✅ Done |
