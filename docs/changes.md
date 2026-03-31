@@ -25,6 +25,25 @@ A running log of changes made to this system — what was added, removed, or mod
 - Added `sleep 1` after PCI rescan on resume — gives the Broadcom chip time to initialize before modprobe runs
 - Added `sleep 1` after `modprobe brcmfmac brcmfmac_wcc btusb` on resume — gives drivers time to settle before networking/bluetooth services start
 
+### quickshell bar — interactive bluetooth indicator with paired device popup
+
+**Feature**: The bluetooth widget is now always visible and clickable, showing paired devices in a popup when clicked.
+
+**Details**:
+- Widget displays `󰂯` (icon) when no devices connected, `󰂱 N` when N devices connected
+- Icon color: `Colors.muted` when disconnected, `Colors.accent` when connected
+- Click indicator → fullscreen overlay popup appears anchored top-right below the bar
+- Popup lists paired devices with connect/disconnect toggle (via `bluetoothctl`)
+- Click outside popup or on the indicator again → popup closes
+- Single popup instance at ShellRoot level using `WlrLayer.Overlay` to prevent duplication on multi-monitor
+
+**Implementation**:
+- New singleton: `services/BluetoothPopupState.qml` (state: `open`, `popupScreen`, `toggle()`, `close()`)
+- New popup: `modules/bar/BluetoothPopup.qml` (fullscreen PanelWindow with device list)
+- Updated widget: `modules/bar/widgets/Bluetooth.qml` (always visible, clickable, larger hit target)
+- Updated bar: `modules/bar/Bar.qml` (wire click signal to popup state)
+- Updated root: `modules/bar/shell.qml` (add BluetoothPopup instance)
+
 ---
 
 ### hyprland — fix lid switch scale out of sync with monitor config
