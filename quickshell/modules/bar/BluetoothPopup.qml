@@ -23,6 +23,14 @@ PanelWindow {
     exclusionMode: ExclusionMode.Ignore
     color: "transparent"
 
+    property var pairedDevices: {
+        let paired = []
+        for (const d of Bluetooth.devices.values) {
+            if (d.paired) paired.push(d)
+        }
+        return paired
+    }
+
     // Fullscreen transparent area — click outside popup to dismiss
     MouseArea {
         anchors.fill: parent
@@ -79,13 +87,7 @@ PanelWindow {
 
             // Paired device list
             Repeater {
-                model: {
-                    let paired = []
-                    for (const d of Bluetooth.devices.values) {
-                        if (d.paired) paired.push(d)
-                    }
-                    return paired
-                }
+                model: root.pairedDevices
 
                 delegate: Rectangle {
                     id: deviceRow
@@ -151,12 +153,7 @@ PanelWindow {
 
             // Empty state when no paired devices
             Text {
-                visible: {
-                    for (const d of Bluetooth.devices.values) {
-                        if (d.paired) return false
-                    }
-                    return true
-                }
+                visible: root.pairedDevices.length === 0
                 text: "No paired devices"
                 color: Colors.muted
                 font.pixelSize: Config.fontSize

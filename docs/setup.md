@@ -53,7 +53,7 @@
 | Component | Setup | Status |
 |---|---|---|
 | **Window manager** | Hyprland | ✅ |
-| **Status bar** | quickshell | Phase 3 done (weather + city, CPU, MEM, TEMP, battery, WiFi, BT live). Phase 4 (volume + tray) next. |
+| **Status bar** | quickshell | Phase 3 done (weather + city, CPU, MEM, TEMP, battery, WiFi, BT live). Phase 4 (volume + tray) next. Bar background opacity configurable in `quickshell/config/Colors.qml`. |
 | **App launcher** | wofi | ✅ |
 | **Notifications** | mako | ✅ top-right, 5s timeout, per-urgency rules |
 | **Screenshot** | hyprshot | ✅ |
@@ -236,6 +236,37 @@ When apps (like Brave) call "Show in folder", they use the `inode/directory` MIM
    ```
 
 **How it works**: The wrapper script (`yazi-in-ghostty`) changes to the provided directory, then launches `ghostty -e fish -c "yazi"`. The explicit Fish shell ensures your full environment (PATH, aliases, config) loads before yazi starts.
+
+---
+
+## Quickshell Configuration
+
+### Bar Background Opacity
+
+The bar's background opacity is controlled via the `bgAlpha` property in `quickshell/config/Colors.qml`. The format is `#AARRGGBB` where the first two hex digits (AA) control opacity on a 0–255 scale.
+
+Common opacity values (with current background color `#282828`):
+
+| Opacity | Hex value | Example |
+|---------|-----------|---------|
+| 100% (fully opaque) | `ff` | `#ff282828` |
+| **95% (current)** | **`f2`** | **`#f2282828`** |
+| 90% | `e6` | `#e6282828` |
+| 85% | `d9` | `#d9282828` |
+| 80% | `cc` | `#cc282828` |
+| 75% | `bf` | `#bf282828` |
+| 70% | `b3` | `#b3282828` |
+| 65% | `a6` | `#a6282828` |
+| 60% | `99` | `#99282828` |
+| 55% | `8c` | `#8c282828` |
+| 50% | `80` | `#80282828` |
+
+To adjust, edit `quickshell/config/Colors.qml:14`:
+```qml
+readonly property color bgAlpha: "#d9282828"  // Example: 85% opacity
+```
+
+**Important**: The window's `surfaceFormat.opaque` property must be false (the default for non-opaque colors) at startup for transparency to work. If changed later, the bar may need to be restarted.
 
 ---
 

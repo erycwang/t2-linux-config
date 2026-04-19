@@ -1,0 +1,50 @@
+# Suspend fix for 2020 13" MacBook Pro (Touch Bar), BCM4364 WiFi, T2 chip.
+# Runs as a Before=sleep.target service. Pre-suspend: stops PipeWire,
+# NetworkManager and iwd, then unloads brcmfmac, touch bar (hid_appletb_*),
+# and apple-bce modules in dependency order. Post-resume: reloads them in
+# reverse order and restarts networking and PipeWire.
+#
+
+[Unit]
+Description=Fix T2 suspend (unload keyboard, touch bar, and WiFi modules; handles NetworkManager and iwd dependencies)
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+User=root
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=-/usr/bin/systemctl stop bluetooth
+ExecStart=-/usr/bin/systemctl stop NetworkManager
+ExecStart=-/usr/bin/systemctl stop iwd
+ExecStart=-/usr/bin/rfkill block wifi bluetooth
+ExecStart=-/usr/bin/ip link set wlan0 down
+ExecStart=-/usr/bin/sleep 1
+ExecStart=-/usr/bin/modprobe -r brcmfmac_wcc
+ExecStart=-/usr/bin/modprobe -r brcmfmac btusb
+ExecStart=-/bin/sh -c 'echo 1 > /sys/bus/pci/devices/0000:e5:00.0/remove'
+ExecStart=-/usr/bin/rmmod -f hid_appletb_kbd hid_appletb_bl
+ExecStart=-/usr/bin/systemctl --user -M ericw@.host stop wireplumber pipewire-pulse pipewire
+ExecStart=-/usr/bin/rmmod apple-bce
+
+#after wake
+ExecStop=/usr/bin/modprobe apple-bce
+ExecStop=/usr/bin/sleep 2
+ExecStop=/usr/bin/systemctl --user -M ericw@.host start pipewire pipewire-pulse wireplumber
+ExecStop=/usr/bin/modprobe hid_appletb_bl
+ExecStop=/usr/bin/modprobe hid_appletb_kbd
+ExecStop=/usr/bin/rfkill unblock wifi 
+ExecStop=/bin/sh -c 'echo 1 > /sys/bus/pci/rescan'
+ExecStop=/usr/bin/sleep 2
+ExecStop=/usr/bin/modprobe brcmfmac brcmfmac_wcc btusb
+ExecStop=/usr/bin/sleep 1
+ExecStop=/usr/bin/rfkill unblock bluetooth
+ExecStop=/usr/bin/systemctl start iwd
+ExecStop=/usr/bin/sleep 1
+ExecStop=/usr/bin/systemctl start NetworkManager
+ExecStop=/usr/bin/sleep 1
+ExecStop=/usr/bin/systemctl restart bluetooth
+ExecStop=/usr/bin/systemctl restart t2fanrd
+
+[Install]
+WantedBy=sleep.target

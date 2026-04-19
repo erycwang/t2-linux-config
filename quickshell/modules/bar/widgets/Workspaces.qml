@@ -12,37 +12,48 @@ RowLayout {
     property var monitor: Hyprland.monitorFor(screen)
     property int activeWsId: monitor?.activeWorkspace?.id ?? -1
 
+    // Shared lookup maps — computed once, used by all 10 delegates
+    property var otherMonitorWsIds: {
+        var result = {}
+        var monitors = Hyprland.monitors.values
+        for (var i = 0; i < monitors.length; i++) {
+            var m = monitors[i]
+            if (m !== monitor) {
+                var wsId = m.activeWorkspace?.id
+                if (wsId) result[wsId] = true
+            }
+        }
+        return result
+    }
+    property var occupiedOffscreenWsIds: {
+        var onScreen = {}
+        var monitors = Hyprland.monitors.values
+        for (var i = 0; i < monitors.length; i++)
+            onScreen[monitors[i].activeWorkspace?.id] = true
+        var result = {}
+        var workspaces = Hyprland.workspaces.values
+        for (var i = 0; i < workspaces.length; i++) {
+            var wsId = workspaces[i].id
+            if (wsId > 0 && !onScreen[wsId]) result[wsId] = true
+        }
+        return result
+    }
+    property bool hasSpecialWorkspace: {
+        var workspaces = Hyprland.workspaces.values
+        for (var i = 0; i < workspaces.length; i++) {
+            if (workspaces[i].id < 0) return true
+        }
+        return false
+    }
+
     Repeater {
         model: 10
         delegate: Rectangle {
             required property int index
             property int wsId: index + 1
             property bool isActive: activeWsId === wsId
-            property bool isOnOtherMonitor: {
-                var monitors = Hyprland.monitors.values
-                for (var i = 0; i < monitors.length; i++) {
-                    var m = monitors[i]
-                    if (m !== monitor && m.activeWorkspace?.id === wsId)
-                        return true
-                }
-                return false
-            }
-            // Has windows but not visible on any monitor — check monitors
-            // directly to avoid cascading from isActive/isOnOtherMonitor
-            property bool hasOffscreenWindows: {
-                var workspaces = Hyprland.workspaces.values
-                var exists = false
-                for (var i = 0; i < workspaces.length; i++) {
-                    if (workspaces[i].id === wsId) { exists = true; break }
-                }
-                if (!exists) return false
-                var monitors = Hyprland.monitors.values
-                for (var i = 0; i < monitors.length; i++) {
-                    if (monitors[i].activeWorkspace?.id === wsId)
-                        return false
-                }
-                return true
-            }
+            property bool isOnOtherMonitor: wsId in otherMonitorWsIds
+            property bool hasOffscreenWindows: wsId in occupiedOffscreenWsIds
 
             width: 24
             height: 24
@@ -84,13 +95,7 @@ RowLayout {
         id: specialWsIndicator
         property bool specialActive: (monitor?.lastIpcObject?.specialWorkspace?.id ?? 0) !== 0
         property bool isActive: specialActive
-        property bool hasWindows: {
-            var workspaces = Hyprland.workspaces.values
-            for (var i = 0; i < workspaces.length; i++) {
-                if (workspaces[i].id < 0) return true
-            }
-            return false
-        }
+        property bool hasWindows: hasSpecialWorkspace
 
         Connections {
             target: Hyprland

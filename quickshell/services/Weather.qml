@@ -92,24 +92,27 @@ QtObject {
     }
 
     property var timer: Timer {
-        interval:         60000
+        interval:         900000  // 15 min
         running:          true
         repeat:           true
         triggeredOnStart: true
         onTriggered: {
-            let now = Date.now()
-            // On first run or after suspend (time jump > 2 min), refresh immediately
-            if (root._lastTime === 0 || (now - root._lastTime) > 120000) {
-                proc.running = true
-            }
-            root._lastTime = now
+            root._lastTime = Date.now()
+            proc.running = true
         }
     }
 
-    property var fullRefreshTimer: Timer {
-        interval:         900000  // 15 min
+    // Lightweight suspend-wake detector — only checks for time jumps
+    property var suspendDetector: Timer {
+        interval:         120000  // 2 min
         running:          true
         repeat:           true
-        onTriggered:      proc.running = true
+        onTriggered: {
+            let now = Date.now()
+            if (root._lastTime > 0 && (now - root._lastTime) > 180000) {
+                proc.running = true
+                root._lastTime = now
+            }
+        }
     }
 }
